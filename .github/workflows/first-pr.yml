@@ -26,7 +26,9 @@ jobs:
               owner: owner,
               creator: '${{ github.actor }}'
             })
-            return reply.data.filter((data) => data.pull_request).length;
+            const prCount = reply.data.filter((data) => data.pull_request).length;
+            console.log(`${{ github.actor }} has created ${prCount}`);
+            return prCount;
       - if: ${{ steps.get-pr-count.outputs.result }} == '1'
         run: |
           yarn dlx -p @o3r/azure-tools o3r-comment-pr "

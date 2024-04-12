@@ -31,7 +31,7 @@ jobs:
               repo: repo,
               owner: owner,
               creator: '${{ github.actor }}'
-            })
+            });
             const prCount = reply.data.filter((data) => data.pull_request).length;
             console.log(`${{ github.actor }} has created ${prCount}` PR);
             return prCount;

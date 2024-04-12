@@ -29,10 +29,14 @@ jobs:
               creator: '${{ github.actor }}'
             }).then((reply) => {
               const countPR = reply.data.filter((data) => data.pull_request).length;
-              github.rest.issues.createComment({
-                issue_number: context.issue.number,
-                repo: repo,
-                owner: owner,
-                body: '![](${{ env.IMAGE_URL }})\n${{ env.MESSAGE }}!'
-              });
+              if (countPR === 1) {
+                github.rest.issues.createComment({
+                  issue_number: context.issue.number,
+                  repo: repo,
+                  owner: owner,
+                  body: '![](${{ env.IMAGE_URL }})\n${{ env.MESSAGE }}'
+                });
+              } else {
+                console.log(`${{ github.actor }} has already opened ${countPR} PRs`);
+              }
             });

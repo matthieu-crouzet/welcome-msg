@@ -15,33 +15,28 @@ jobs:
   first-pr:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
-        with:
-          node-version: 20
-      - name: Enable Corepack
-        shell: bash
-        run: corepack enable
       - uses: actions/github-script@v7
         id: get-pr-count
         with:
           script: |
             const [owner, repo] = '${{ github.repository }}'.split('/');
-            const reply = await github.rest.issues.listForRepo({
+            github.rest.issues.listForRepo({
               state: 'all',
               repo: repo,
               owner: owner,
               creator: '${{ github.actor }}'
+            }).then((reply) => {
+              const prCount = reply.data.filter((data) => data.pull_request).length;
+              console.log(`${{ github.actor }} has created ${prCount} PR`);
+              if (prCount === 1) {
+                github.rest.issues.createComment({
+                  repo: repo,
+                  owner: owner,
+                  issue_number: context.issue.number,
+                  body: '
+                    ![](https://raw.githubusercontent.com/AmadeusITGroup/otter/main/assets/logo/flavors/fireworks.png)
+                    Thanks so much for opening your first PR here!
+                  '
+                })
+              }
             });
-            const prCount = reply.data.filter((data) => data.pull_request).length;
-            console.log(`${{ github.actor }} has created ${prCount} PR`);
-            if (prCount === 1) {
-              github.rest.issues.createComment({
-                repo: repo,
-                owner: owner,
-                issue_number: context.issue.number,
-                body: '
-                  ![](https://raw.githubusercontent.com/AmadeusITGroup/otter/main/assets/logo/flavors/fireworks.png)
-                  Thanks so much for opening your first PR here!
-                '
-              })
-            }

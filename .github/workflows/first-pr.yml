@@ -25,17 +25,14 @@ jobs:
               owner: owner,
               creator: '${{ github.actor }}'
             }).then((reply) => {
-              const prCount = reply.data.filter((data) => data.pull_request).length;
-              console.log(`${{ github.actor }} has created ${prCount} PR`);
-              if (prCount === 1) {
-                github.rest.issues.createComment({
-                  repo: repo,
-                  owner: owner,
-                  issue_number: context.issue.number,
-                  body: '
-                    ![](https://raw.githubusercontent.com/AmadeusITGroup/otter/main/assets/logo/flavors/fireworks.png)
-                    Thanks so much for opening your first PR here!
-                  '
-                })
-              }
+              const countPR = reply.data.filter((data) => data.pull_request).length;
+              github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                repo: repo,
+                owner: owner,
+                body: '
+                  ![](https://raw.githubusercontent.com/AmadeusITGroup/otter/main/assets/logo/flavors/fireworks.png)
+                  Thanks so much for opening your first PR here!
+                '
+              });
             });

@@ -35,7 +35,7 @@ jobs:
             const prCount = reply.data.filter((data) => data.pull_request).length;
             console.log(`${{ github.actor }} has created ${prCount} PR`);
             return prCount;
-      - if: ${{ steps.get-pr-count.outputs.result == '1' }}
+      - if: ${{ steps.get-pr-count.outputs.result == '6' }}
         run: |
           yarn dlx -p @o3r/azure-tools o3r-comment-pr "
             ![](https://raw.githubusercontent.com/AmadeusITGroup/otter/main/assets/logo/flavors/fireworks.png)

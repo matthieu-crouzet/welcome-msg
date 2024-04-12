@@ -40,4 +40,4 @@ jobs:
           yarn dlx -p @o3r/azure-tools o3r-comment-pr "
             ![](https://raw.githubusercontent.com/AmadeusITGroup/otter/main/assets/logo/flavors/fireworks.png)
             Thanks so much for opening your first PR here!
-          "
+          " -T ${{ secrets.GITHUB_TOKEN }}

@@ -21,7 +21,7 @@ jobs:
             const [owner, repo] = '${{ github.repository }}'.split('/');
             const reply = github.rest.issues.listForRepo(context.repo({
               state: 'all',
-              creator: context.payload.issue.user.login
+              creator: '${{ github.actor }}'
             }));
             const countPR = reply.data.filter((data) => data.pull_request).length;
             github.rest.issues.createComment(context.issue({

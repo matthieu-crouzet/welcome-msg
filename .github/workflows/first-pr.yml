@@ -34,10 +34,14 @@ jobs:
             });
             const prCount = reply.data.filter((data) => data.pull_request).length;
             console.log(`${{ github.actor }} has created ${prCount} PR`);
-            return prCount;
-      - if: ${{ steps.get-pr-count.outputs.result == '6' }}
-        run: |
-          yarn dlx -p @o3r/azure-tools o3r-comment-pr "
-            ![](https://raw.githubusercontent.com/AmadeusITGroup/otter/main/assets/logo/flavors/fireworks.png)
-            Thanks so much for opening your first PR here!
-          " -T ${{ secrets.GITHUB_TOKEN }}
+            if (prCount === 1) {
+              github.rest.issues.createComment({
+                repo: repo,
+                owner: owner,
+                issue_number: context.issue.number,
+                body: '
+                  ![](https://raw.githubusercontent.com/AmadeusITGroup/otter/main/assets/logo/flavors/fireworks.png)
+                  Thanks so much for opening your first PR here!
+                '
+              })
+            }

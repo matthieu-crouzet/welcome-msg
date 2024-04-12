@@ -26,5 +26,5 @@ jobs:
             const countPR = reply.data.filter((data) => data.pull_request).length;
             github.rest.issues.createComment(context.issue({
               body: 'Thanks so much for opening your first PR here!' + countPR
-            })
+            }));
 

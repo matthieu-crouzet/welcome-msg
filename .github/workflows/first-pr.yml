@@ -7,7 +7,8 @@ on:
 
 permissions:
   contents: read
-  issues: write
+  issues: read
+  pull-requests: read
 
 jobs:
   audit:
@@ -27,7 +28,7 @@ jobs:
             github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              issue_number: context.payload.pull_request.issue.number,
+              issue_number: context.issue.number,
               body: 'Thanks so much for opening your first PR here!' + countPR
             })
 

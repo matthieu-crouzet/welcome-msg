@@ -16,22 +16,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/github-script@v7
-        id: my-script
+        id: get-pr-count
         with:
           script: |
             const [owner, repo] = '${{ github.repository }}'.split('/');
-            github.rest.issues.listForRepo({
+            const reply = await github.rest.issues.listForRepo({
               state: 'all',
               repo: repo,
               owner: owner,
               creator: '${{ github.actor }}'
-            }).then((reply) => {
-              const countPR = reply.data.filter((data) => data.pull_request).length;
-              github.rest.issues.createComment({
-                issue_number: context.issue.number,
-                repo: repo,
-                owner: owner,
-                body: 'Thanks so much for opening your first PR here!' + countPR
-              });
-            });
-
+            })
+            return reply.data.filter((data) => data.pull_request).length;
+      - if: ${{ steps.get-pr-count.outputs.result }} == '1'
+        run: |
+          yarn dlx -p @o3r/azure-tools o3r-comment-pr "
+            ![](https://raw.githubusercontent.com/AmadeusITGroup/otter/main/assets/logo/flavors/fireworks.png)
+            Thanks so much for opening your first PR here!
+          "

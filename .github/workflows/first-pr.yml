@@ -20,17 +20,6 @@ jobs:
         with:
           script: |
             const [owner, repo] = '${{ github.repository }}'.split('/');
-            const reply = github.rest.issues.listForRepo({
-              state: 'all',
-              creator: '${{ github.actor }}',
-              repo: repo,
-              owner: owner
-            });
-            const countPR = reply.data.filter((data) => data.pull_request).length;
-            github.rest.issues.createComment({
-              issue_number: context.issue.number
-              repo: repo,
-              owner: owner,
-              body: 'Thanks so much for opening your first PR here!' + countPR
-            });
+            console.log(owner, repo);
+
 
